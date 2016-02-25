@@ -26,16 +26,6 @@ frame.attr("height", frame_height);
 // Shift the canvas and make it slightly smaller than the svg canvas.
 canvas.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-// Draw a demonstration circle using the SVG element
-// http://www.w3schools.com/svg/svg_circle.asp
-var circle = canvas.append("circle");
-circle.attr("r", 100);
-circle.attr("cx", 100);
-circle.attr("cy", 100);
-circle.attr("stroke", "black");
-circle.attr("stroke-width", 3);
-circle.attr("fill", "red");
-
 // Follow d3 data example
 // http://isakiko.github.io/D3-visualising-data/08-d3enter.html
 
