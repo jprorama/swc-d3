@@ -1,6 +1,8 @@
 // Select the dataset
+// note: references to the parsed data "nations" only available in callback
+//       so render the plot within the callback.
 var dataUrl = "https://raw.githubusercontent.com/IsaKiko/D3-visualising-data/gh-pages/code/nations.json";
-d3.json(dataUrl, function(nations) { })
+d3.json(dataUrl, function(nations) {
 
 // Select the chart area by ID 
 var chart_area = d3.select("#chart_area");
@@ -66,3 +68,17 @@ canvas.append("g")
     .attr("class", "y axis")
     .attr("transform", "translate(0,0)")
     .call(yAxis);
+
+// plot the data from life expectancy for final year
+var data_canvas = canvas.append("g")
+  .attr("class", "data_canvas");
+
+var dot = data_canvas.selectAll(".dot")
+  .data(nations, function(d){return d.name});
+
+dot.enter().append("circle").attr("class","dot")
+  .attr("cx", function(d) { return xScale(d.income[d.income.length-1]); })
+  .attr("cy", function(d) { return yScale(d.lifeExpectancy[d.lifeExpectancy.length-1]); })
+  .attr("r", 5);
+
+})
