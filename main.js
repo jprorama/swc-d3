@@ -24,9 +24,12 @@ frame.attr("height", frame_height);
 // Shift the canvas and make it slightly smaller than the svg canvas.
 canvas.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-// Draw a demonstration circle
-// http://www.w3schools.com/tags/canvas_arc.asp
-var ctx=canvas.getContext("2d");
-ctx.beginPath();
-ctx.arc(100,75,50,0,2*Math.PI);
-ctx.stroke();
+// Draw a demonstration circle using the SVG element
+// http://www.w3schools.com/svg/svg_circle.asp
+var circle = canvas.append("circle");
+circle.attr("r", 100);
+circle.attr("cx", 100);
+circle.attr("cy", 100);
+circle.attr("stroke", "black");
+circle.attr("stroke-width", 3);
+circle.attr("fill", "red");
