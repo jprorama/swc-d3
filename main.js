@@ -69,6 +69,10 @@ canvas.append("g")
     .attr("transform", "translate(0,0)")
     .call(yAxis);
 
+// create sqrt scale for country population
+// note: d3.scale is a mapping function to convert data into a range
+var pScale = d3.scale.sqrt().domain([0,5e8]).range([0,40]);
+
 // plot the data from life expectancy for final year
 var data_canvas = canvas.append("g")
   .attr("class", "data_canvas");
@@ -79,6 +83,6 @@ var dot = data_canvas.selectAll(".dot")
 dot.enter().append("circle").attr("class","dot")
   .attr("cx", function(d) { return xScale(d.income[d.income.length-1]); })
   .attr("cy", function(d) { return yScale(d.lifeExpectancy[d.lifeExpectancy.length-1]); })
-  .attr("r", 5);
+  .attr("r",  function(d) { return pScale(d.population[d.population.length-1]); })
 
 })
