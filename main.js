@@ -33,3 +33,36 @@ circle.attr("cy", 100);
 circle.attr("stroke", "black");
 circle.attr("stroke-width", 3);
 circle.attr("fill", "red");
+
+// Follow d3 data example
+// http://isakiko.github.io/D3-visualising-data/08-d3enter.html
+
+// Create a logarithmic scale for the income 
+var xScale = d3.scale.log(); // income
+xScale.domain([250, 1e5]); // set minimum and maximum value
+xScale.range([0, canvas_width]); // set minimum and maximum range on the page
+
+// Creating the x & y axes.
+var xAxis = d3.svg.axis().orient("bottom").scale(xScale);
+
+// Add the x-axis.
+canvas.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + canvas_height + ")")
+    .call(xAxis);
+
+// create linear scale for life expectency
+// note: y-axis drawn from top of the svg down so the first tick drawn is the maximum of our domain "84"
+var yScale = d3.scale.linear().domain([84,10]).range([0,canvas_height]); // life expectancy
+
+// Create y axis
+// note: .orient() tells d3 how to draw the axis based on expected location. it doesn't place the axis
+var yAxis = d3.svg.axis().orient("left").scale(yScale);
+
+// Add y-axis
+// note: translate is 0,0 because the coordinate system is top-left with positive positions down and right 
+//       in the case of the y axis it is drawn from the top-left down, so there is no need to translate its position
+canvas.append("g")
+    .attr("class", "y axis")
+    .attr("transform", "translate(0,0)")
+    .call(yAxis);
