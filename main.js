@@ -61,18 +61,51 @@ canvas.append("g")
 
 // create sqrt scale for country population
 // note: d3.scale is a mapping function to convert data into a range
-var pScale = d3.scale.sqrt().domain([0,5e8]).range([0,40]);
+var rScale = d3.scale.sqrt().domain([0,5e8]).range([0,40]);
 
 // plot the data from life expectancy for final year
 var data_canvas = canvas.append("g")
   .attr("class", "data_canvas");
 
-var dot = data_canvas.selectAll(".dot")
-  .data(nations, function(d){return d.name});
+// example filters
+//
+// filter by population size
+//var filtered_nations = nations.filter(function(nation){
+//    return nation.population[nation.population.length-1] > 10000000;
+//});
 
-dot.enter().append("circle").attr("class","dot")
-  .attr("cx", function(d) { return xScale(d.income[d.income.length-1]); })
-  .attr("cy", function(d) { return yScale(d.lifeExpectancy[d.lifeExpectancy.length-1]); })
-  .attr("r",  function(d) { return pScale(d.population[d.population.length-1]); })
+// filter by region
+//var filtered_nations = nations.filter(function(nation){
+//    return nation.region[nation.region.length-1] == "Sub-Saharan Africa";
+//});
+
+// copy all nations to filtered_nations
+var filtered_nations = nations.map(function(nation) { return nation; });
+
+// render the graph on page load
+update();
+
+function update() {
+  var dot = data_canvas.selectAll(".dot").data(filtered_nations, function(d){return d.name});
+
+  dot.enter().append("circle").attr("class","dot")
+                //.style("fill", function(d) { return colorScale(d.region); });
+                .attr("cx", function(d) { return xScale(d.income[d.income.length-1]); }) // this is how attr knows to work with the data
+                .attr("cy", function(d) { return yScale(d.lifeExpectancy[d.lifeExpectancy.length-1]); })
+                .attr("r", function(d) { return rScale(d.population[d.population.length-1]); });
+
+  dot.exit().remove();
+}
+
+d3.selectAll(".region_cb").on("change", function() {
+  var type = this.value;
+  if (this.checked) { // adding data points (not quite right yet)
+    var new_nations = nations.filter(function(nation){ return nation.region == type;});
+    filtered_nations = filtered_nations.concat(new_nations);
+  } else { // remove data points from the data that match the filter
+    filtered_nations = filtered_nations.filter(function(nation){ return nation.region != type;});
+  }
+  update();
+});
 
 })
