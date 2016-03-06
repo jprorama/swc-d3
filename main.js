@@ -63,6 +63,9 @@ canvas.append("g")
 // note: d3.scale is a mapping function to convert data into a range
 var rScale = d3.scale.sqrt().domain([0,5e8]).range([0,40]);
 
+// color scale for country region
+var colorScale = d3.scale.category20().domain(["Sub-Saharan Africa", "South Asia", "Middle East & North Africa", "America", "Europe & Central Asia", "East Asia & Pacific"]);
+
 // plot the data from life expectancy for final year
 var data_canvas = canvas.append("g")
   .attr("class", "data_canvas");
@@ -89,7 +92,7 @@ function update() {
   var dot = data_canvas.selectAll(".dot").data(filtered_nations, function(d){return d.name});
 
   dot.enter().append("circle").attr("class","dot")
-                //.style("fill", function(d) { return colorScale(d.region); });
+                .style("fill", function(d) { return colorScale(d.region); })
                 .attr("cx", function(d) { return xScale(d.income[d.income.length-1]); }) // this is how attr knows to work with the data
                 .attr("cy", function(d) { return yScale(d.lifeExpectancy[d.lifeExpectancy.length-1]); })
                 .attr("r", function(d) { return rScale(d.population[d.population.length-1]); });
