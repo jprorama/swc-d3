@@ -70,6 +70,14 @@ var colorScale = d3.scale.category20().domain(["Sub-Saharan Africa", "South Asia
 var data_canvas = canvas.append("g")
   .attr("class", "data_canvas");
 
+// compute year index from slider
+var year_idx = parseInt(document.getElementById("year_slider").value)-1950;
+
+d3.select("#year_slider").on("input", function () {
+    year_idx = parseInt(this.value) - 1950;
+    update();
+});
+
 // example filters
 //
 // filter by population size
@@ -92,10 +100,11 @@ function update() {
   var dot = data_canvas.selectAll(".dot").data(filtered_nations, function(d){return d.name});
 
   dot.enter().append("circle").attr("class","dot")
-                .style("fill", function(d) { return colorScale(d.region); })
-                .attr("cx", function(d) { return xScale(d.income[d.income.length-1]); }) // this is how attr knows to work with the data
-                .attr("cy", function(d) { return yScale(d.lifeExpectancy[d.lifeExpectancy.length-1]); })
-                .attr("r", function(d) { return rScale(d.population[d.population.length-1]); });
+                .style("fill", function(d) { return colorScale(d.region); });
+    dot.transition().ease("linear").duration(200)
+                .attr("cx", function(d) { return xScale(d.income[year_idx]); }) // this is how attr knows to work with the data
+                .attr("cy", function(d) { return yScale(d.lifeExpectancy[year_idx]); })
+                .attr("r", function(d) { return rScale(d.population[year_idx]); });
 
   dot.exit().remove();
 }
